@@ -11,15 +11,16 @@ class StringSerializer(serializers.StringRelatedField):
 
 
 class StudentSerializer(serializers.ModelSerializer):
+    user = StringSerializer(many=False)
     class Meta:
         model = Student
-        fields = "__all__"
+        fields = ('__all__')
         
 class EducatorSerializer(serializers.ModelSerializer):
-
+    user = StringSerializer(many=False)
     class Meta:
         model = Educator
-        fields = "__all__"
+        fields = ('__all__')
         
 
 class RegisterSerializer(RegisterSerializer):

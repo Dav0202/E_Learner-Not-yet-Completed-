@@ -17,11 +17,19 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/view/', include('users.urls')),
+    path('user/view/', include('users.urls')),
+    path('assignments/', include('api.assignment.urls')),
+    path('scores/', include('api.graded_assignment.urls')),
     path('rest-auth/', include('rest_auth.urls')),
-    path('users/registration/', include('rest_auth.registration.urls')),
+    path('user/registration/', include('rest_auth.registration.urls')),
     path('accounts/', include('allauth.urls')),
+    path('user/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('user/login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

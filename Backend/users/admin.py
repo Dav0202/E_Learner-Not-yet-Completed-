@@ -5,10 +5,12 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
 from django import forms
 from django.contrib import admin
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
 
 
 class UserCreationForm(forms.ModelForm):
@@ -63,7 +65,8 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = [
         (None, {'fields': ['email', 'password', 'is_student', 'is_educator']}),
         ('Personal info', {'fields': ['first_name', 'last_name', 'username']}),
-        ('Permissions', {'fields': ['is_admin']}),
+        (('Permissions'), {'fields': ('is_active', 'is_staff',
+                                       'groups', 'user_permissions')}),
     ]
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -75,11 +78,8 @@ class UserAdmin(BaseUserAdmin):
     ]
     search_fields = ['email']
     ordering = ['email']
-    filter_horizontal = []
-
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
-admin.site.unregister(Group)
 admin.site.register(Student)
 admin.site.register(Educator)
