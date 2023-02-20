@@ -1,0 +1,55 @@
+.image {
+  -moz-transition: opacity 0.25s ease-in-out;
+  -webkit-transition: opacity 0.25s ease-in-out;
+  -ms-transition: opacity 0.25s ease-in-out;
+  transition: opacity 0.25s ease-in-out;
+  display: inline-block;
+  outline: 0;
+  border: 0;
+}
+
+  .image img {
+    display: block;
+    width: 100%;
+  }
+
+  .image.fit {
+    display: block;
+    width: 100%;
+  }
+
+  .image.featured {
+    display: block;
+    width: 100%;
+    margin: 0 0 3em 0;
+  }
+
+  .image.left {
+    float: left;
+    margin: 0 2em 2em 0;
+  }
+
+  .image.centered {
+    display: block;
+    margin: 0 0 3em 0;
+  }
+
+    .image.centered img {
+      margin: 0 auto;
+      width: auto;
+    }
+
+a.image:hover {
+  opacity: 0.85;
+}
+.features {
+  margin-bottom: 1.5em;
+}
+
+.feature {
+  text-align: center;
+}
+.major-p{
+  text-align: center;
+  font-size: 1.5rem;
+}

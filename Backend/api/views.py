@@ -1,5 +1,5 @@
-from .serializers import AssignmentSerializer, GradedAssignmentSerializer
-from .models import Assignment, GradedAssignment, Question
+from .serializers import AssignmentSerializer, GradedAssignmentSerializer, MaterialSerializer
+from .models import Assignment, GradedAssignment, Question, Material
 # Create your views here.
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -7,7 +7,15 @@ from rest_framework.status import (
     HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST
 )
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
+
+class MaterialView(ListCreateAPIView):
+    serializer_class = MaterialSerializer
+    
+    def get_queryset(self):
+        queryset = Material.objects.all()
+        if queryset is not None:
+            return queryset
 
 class AssignmentViewSet(viewsets.ModelViewSet):
     serializer_class = AssignmentSerializer

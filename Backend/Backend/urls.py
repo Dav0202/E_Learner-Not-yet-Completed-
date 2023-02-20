@@ -27,6 +27,7 @@ urlpatterns = [
     path('user/view/', include('users.urls')),
     path('assignments/', include('api.assignment.urls')),
     path('scores/', include('api.graded_assignment.urls')),
+    path('materials/', include('api.materials.urls')),
     path('rest-auth/', include('rest_auth.urls')),
     path('user/registration/', include('rest_auth.registration.urls')),
     path('accounts/', include('allauth.urls')),

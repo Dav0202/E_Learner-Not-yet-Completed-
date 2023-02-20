@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from users.models import User
 from django.core.validators import MaxLengthValidator
+import uuid
 # Create your models here.
 
 class Assignment(models.Model):
@@ -79,3 +80,13 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question
+
+
+class Material(models.Model):
+    uploader = models.ForeignKey(User, limit_choices_to={'is_educator': True}, on_delete=models.CASCADE)
+    description = models.CharField(max_length=255, blank=True)
+    material = models.FileField(upload_to=f"material/%Y/%m/%d/{uuid.uuid4()}")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.description
