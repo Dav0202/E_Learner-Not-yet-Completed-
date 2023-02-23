@@ -1,0 +1,108 @@
+<html>
+<body>
+
+  <div class="container">
+
+    <header>
+
+      <a href="#" class="logo">E-<span>Learner</span></a>
+
+      <nav class="navbar">
+        <a href="home.html">Home</a>
+        <a href="teacher.html">Assignments</a>
+        <a href="price.html">Games</a>
+        <a href="review.html">Materials</a>
+        <!--
+            <a href="course.html">Logout</a>
+            <a href="course.html">Register</a>
+        -->
+      </nav>
+
+    </header>
+
+    <!-- home section  -->
+
+    <section class="home">
+
+      <div class="content">
+        <mat-card>
+          <mat-card-content *ngIf="assignmentdetail">
+            <mat-list>
+                <form  (ngSubmit)="submit()">
+                  <mat-card>
+                    <mat-card-title >
+                      {{assignmentdetail.title}}
+                    </mat-card-title>
+                    <mat-card-content >
+                      <mat-stepper [linear]="isLinear" #stepper>
+                        <mat-step [editable]="false"   *ngFor="let questions of assignmentdetail.questions">
+                          <mat-card>
+                            <mat-card-content>
+                              <mat-card-subtitle><h2>{{questions.question}}</h2></mat-card-subtitle>
+                              <mat-radio-group  aria-label="Select an option" [ngModelOptions]="{standalone: true}" [(ngModel)]="answer" >
+                                <div *ngFor="let item of questions.choices" >
+                                  <mat-radio-button checked="false" [value]="item">{{item}}</mat-radio-button>
+                                </div>
+                              </mat-radio-group>
+                            </mat-card-content>
+                          </mat-card>
+                          <div class="example-button-row">
+                            <button mat-stroked-button color="Basic" type="button" *ngIf="length !== isAtEnd"  (click)="goBack(stepper)">Back</button>
+                            <button mat-stroked-button color="Secondary" *ngIf="length !== isAtEnd" (click)="goForward(stepper)"  type="button">Next</button>
+                            <button mat-stroked-button color="Basic" *ngIf="length === isAtEnd" >Done</button>
+                         </div>
+                        </mat-step>
+                      </mat-stepper>
+
+                    </mat-card-content>
+                  </mat-card>
+                </form>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+
+    </section>
+
+    <!-- footer section  -->
+
+    <section class="footer container">
+
+      <div class="box-container">
+
+        <div class="box">
+          <h3>quick links</h3>
+          <a href="#">home</a>
+          <a href="#">course</a>
+          <a href="#">teacher</a>
+        </div>
+
+        <div class="box">
+          <h3>follow us</h3>
+          <a href="#">facebook</a>
+          <a href="#">twitter</a>
+          <a href="#">instagram</a>
+        </div>
+
+        <div class="box">
+          <h3>contact us</h3>
+          <p> <i class="fas fa-phone"></i> +123-456-7890 </p>
+          <p> <i class="fas fa-envelope"></i> studysmart@gmail.com </p>
+          <p> <i class="fas fa-map-marker-alt"></i> mumbai, india - 400104 </p>
+        </div>
+
+      </div>
+
+      <div class="credit"> 2023 | all rights reserved </div>
+
+    </section>
+
+  </div>
+  <!--
+  custom js file link
+  <script src="js/script.js"></script>
+-->
+</body>
+
+</html>

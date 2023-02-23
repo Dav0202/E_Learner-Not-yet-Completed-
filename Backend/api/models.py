@@ -54,7 +54,7 @@ class Assignment(models.Model):
 
 
 class GradedAssignment(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, limit_choices_to={'is_student': True}, on_delete=models.CASCADE)
     assignment = models.ForeignKey(Assignment, on_delete=models.SET_NULL,
     blank=True, null=True)
     grade = models.IntegerField(validators=[MaxLengthValidator(200)])

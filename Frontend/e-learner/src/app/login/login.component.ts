@@ -32,8 +32,8 @@ export class LoginComponent implements OnInit {
   }
   signupForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    //password2: ['', [Validators.required, Validators.minLength(6)]],
+    password1: ['', [Validators.required, Validators.minLength(6)]],
+    password2: ['', [Validators.required, Validators.minLength(6)]],
     username: ['',[Validators.required]],
     first_name: ['',[Validators.required]],
     last_name: ['',[Validators.required]],
@@ -44,7 +44,6 @@ export class LoginComponent implements OnInit {
   signup(){
     this.ns.newUsers(this.signupForm.value).subscribe()
     console.log(this.signupForm.value)
-    this.signupForm.reset()
   }
 
   onClickeducator(){
@@ -69,6 +68,23 @@ export class LoginComponent implements OnInit {
   switch_left(){
     const container = document.getElementById('container');
     this.renderer.removeClass(container, "right-panel-active");
+  }
+
+  loginForm = this.formBuilder.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+  });
+
+
+  login(){
+    console.log(this.loginForm.value)
+    this.ns.login(this.loginForm.value).subscribe(
+      token => {
+        if (token) {
+          console.log(this.ns.getAuthInfo())
+        }
+      }
+    )
   }
 }
 

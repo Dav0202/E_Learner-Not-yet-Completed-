@@ -21,7 +21,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 class AssignmentSerializer(serializers.ModelSerializer):
     questions = serializers.SerializerMethodField()
-    educators = StringSerializer(many=False)
+    educator = serializers.CharField(source="educator.username", read_only=True)
     class Meta:
         model = Assignment
         fields = ('__all__')
@@ -72,7 +72,7 @@ class GradedAssignmentSerializer(serializers.ModelSerializer):
         data = request.data
         print(data)
         assignment = Assignment.objects.get(id=data['id'])
-        student = User.objects.get(username= data['username'])
+        student = User.objects.get(email= data['email'])
 
         graded_asnt = GradedAssignment()
         graded_asnt.assignment = assignment
@@ -83,6 +83,7 @@ class GradedAssignmentSerializer(serializers.ModelSerializer):
         print(answer)
 
         answered_correct_count = 0
+        print(questions)
         for i in range(len(questions)):
             if questions[i].answer.title == answer[i]:
                 answered_correct_count +=1

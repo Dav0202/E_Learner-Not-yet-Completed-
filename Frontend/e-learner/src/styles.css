@@ -20,7 +20,7 @@
 }
 
 html {
-  font-size: 62.5%;
+  font-size: 42.5%;
   overflow-x: hidden;
 }
 
@@ -31,7 +31,7 @@ body {
 }
 
 section {
-  padding: 1rem 7%;
+  padding: 2rem 7%;
 }
 
 .container {
@@ -779,6 +779,11 @@ button,
     clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
   }
 
+  html {
+    font-size: 50%;
+    font-size: 42.5%;
+  }
+
   header .navbar.active {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   }
@@ -800,6 +805,7 @@ button,
 
   html {
     font-size: 50%;
+    font-size: 42.5%;
   }
 
   ul.actions li {
@@ -857,6 +863,3 @@ button,
   }
 
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

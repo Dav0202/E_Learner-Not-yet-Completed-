@@ -1,3 +1,5 @@
+import { MatStepperModule} from '@angular/material/stepper';
+import { TokenInterceptor } from './services/jwt-interceptor';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,13 +16,20 @@ import { AssignmentComponent } from './assignment/assignment.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CreateAssignmentComponent } from './create-assignment/create-assignment.component';
+import { DetailAssignmentComponent } from './detail-assignment/detail-assignment.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomepageComponent,
     LoginComponent,
-    AssignmentComponent
+    AssignmentComponent,
+    CreateAssignmentComponent,
+    DetailAssignmentComponent
   ],
   imports: [
     BrowserModule,
@@ -33,10 +42,15 @@ import { HttpClientModule } from '@angular/common/http';
     MatButtonModule,
     MatListModule,
     MatCardModule,
-    HttpClientModule
+    HttpClientModule,
+    MatStepperModule,
+    MatRadioModule,
+    MatSnackBarModule
+
   ],
   providers: [
     {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher},
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

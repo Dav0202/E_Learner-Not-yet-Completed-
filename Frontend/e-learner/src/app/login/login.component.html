@@ -20,13 +20,21 @@
           Email is <strong>required</strong>
         </mat-error>
       </mat-form-field>
-
-
-
       <mat-form-field  appearance="fill">
         <mat-label>Password</mat-label>
-        <input type="password" matInput="" formControlName="password">
-        <mat-error *ngIf="signupForm.hasError('password') && !signupForm.hasError('required')">
+        <input type="password" matInput="" formControlName="password1">
+        <mat-error *ngIf="signupForm.hasError('password1') && !signupForm.hasError('required')">
+          Please enter a valid password
+        </mat-error>
+        <mat-error *ngIf="signupForm.hasError('required')">
+          Password is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field  appearance="fill">
+        <mat-label>Password Confirmation</mat-label>
+        <input type="password" matInput="" formControlName="password2">
+        <mat-error *ngIf="signupForm.hasError('password2') && !signupForm.hasError('required')">
           Please enter a valid password
         </mat-error>
         <mat-error *ngIf="signupForm.hasError('required')">
@@ -58,7 +66,6 @@
         </mat-error>
       </mat-form-field>
 
-
       <div class="wrapper">
         <input (click)="onClickstudent()" type="radio" name="select" id="option-1">
         <input (click)="onClickeducator()" type="radio" name="select" id="option-2">
@@ -75,7 +82,7 @@
     </form>
   </div>
   <div class="form-container sign-in-container">
-    <form action="#">
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
       <h1>Sign in</h1>
       <div class="social-container">
         <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -83,10 +90,28 @@
         <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
       </div>
       <span>or use your account</span>
-      <input type="email" placeholder="Email" />
-      <input type="password" placeholder="Password" />
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com">
+        <mat-error *ngIf="signupForm.hasError('email') && !signupForm.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="signupForm.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field  appearance="fill">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput="" formControlName="password">
+        <mat-error *ngIf="signupForm.hasError('password') && !signupForm.hasError('required')">
+          Please enter a valid password
+        </mat-error>
+        <mat-error *ngIf="signupForm.hasError('required')">
+          Password is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
       <a href="#">Forgot your password?</a>
-      <button>Sign In</button>
+      <button type="submit" [disabled]="!loginForm.valid">Sign In</button>
     </form>
   </div>
   <div class="overlay-container">

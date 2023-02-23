@@ -1,0 +1,151 @@
+<html>
+
+<body>
+
+  <div class="container">
+
+    <header>
+
+      <a href="#" class="logo">E-<span>Learner</span></a>
+
+      <nav class="navbar">
+        <a href="home.html">Home</a>
+        <a href="teacher.html">Assignments</a>
+        <a href="price.html">Games</a>
+        <a href="review.html">Materials</a>
+        <!--
+            <a href="course.html">Logout</a>
+            <a href="course.html">Register</a>
+        -->
+      </nav>
+
+    </header>
+
+    <!-- home section  -->
+
+        <mat-card>
+          <mat-card-content>
+            <mat-card-title>
+              Add Assignment
+            </mat-card-title>
+            <form [formGroup]="questionForm" (ngSubmit)="submitQ()">
+              <div>
+                <mat-card-subtitle>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Title</mat-label>
+                    <input formControlName="title" matInput>
+                  </mat-form-field>
+                  <select
+                  formControlName="classes"
+                  class="form-select mb-3"
+                  (blur)="onTouched()"
+                >
+                  <option selected disabled value="">Select Class</option>
+                  <option *ngFor="let option of class_list" [value]="option.value">
+                    {{ option.name }}
+                  </option>
+                </select>
+                <select
+                formControlName="subject"
+                class="form-select mb-3"
+                (blur)="onTouched()"
+              >
+                <option selected disabled value="">Select Subject</option>
+                <option *ngFor="let option of subject_list" [value]="option.value">
+                  {{ option.name }}
+                </option>
+              </select>
+                </mat-card-subtitle>
+              </div>
+              <ng-container formArrayName="question">
+                <mat-card>
+                  <ng-container [formGroupName]="i" *ngFor="let questions of question.controls; let i=index">
+                    <div>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Question</mat-label>
+                        <textarea matInput formControlName="question"></textarea>
+                      </mat-form-field>
+                    </div>
+                    <div>
+                      <mat-form-field appearance="fill">
+                        <mat-label>Answer</mat-label>
+                        <input formControlName="answer" matInput>
+                      </mat-form-field>
+                    </div>
+                    <div>
+                      <mat-card>
+                        <div formArrayName="choices">
+                          <ng-container *ngFor="let choice of choices('question',i); let j=index;">
+                            <mat-form-field appearance="fill">
+                              <mat-label>Choices</mat-label>
+                              <input [formControlName]="j" matInput>
+                            </mat-form-field>
+                            <div>
+
+                        <button mat-stroked-button color="Basic" type='button' (click)="addChoices('question',i)">Add Choices</button>
+                      <button mat-stroked-button color="Basic" type='button' (click)="removeChoices('question',i)">Remove Choices</button>
+
+                            </div>
+                          </ng-container>
+                        </div>
+                      </mat-card>
+                    </div>
+
+                            <div class="example-button-row">
+              <button mat-stroked-button color="Basic" type='button' (click)="addQuestion()">Add Questions</button>
+              <button mat-stroked-button color="Basic" type='button' (click)="removeQuestion(i)" >Remove Questions</button>
+            </div>
+                  </ng-container>
+
+
+                </mat-card>
+              </ng-container>
+              <div class="example-button-row">
+                <button mat-stroked-button color="Basic" type="submit">Submit</button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+
+    <!-- footer section  -->
+
+    <section class="footer container">
+
+      <div class="box-container">
+
+        <div class="box">
+          <h3>quick links</h3>
+          <a href="#">home</a>
+          <a href="#">course</a>
+          <a href="#">teacher</a>
+        </div>
+
+        <div class="box">
+          <h3>follow us</h3>
+          <a href="#">facebook</a>
+          <a href="#">twitter</a>
+          <a href="#">instagram</a>
+        </div>
+
+        <div class="box">
+          <h3>contact us</h3>
+          <p> <i class="fas fa-phone"></i> +123-456-7890 </p>
+          <p> <i class="fas fa-envelope"></i> studysmart@gmail.com </p>
+          <p> <i class="fas fa-map-marker-alt"></i> mumbai, india - 400104 </p>
+        </div>
+
+      </div>
+
+      <div class="credit"> 2023 | all rights reserved </div>
+
+    </section>
+
+  </div>
+  <!--
+  custom js file link
+  <script src="js/script.js"></script>
+-->
+</body>
+
+</html>

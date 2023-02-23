@@ -1,3 +1,4 @@
+import { AssignmentService } from './../services/assignment.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AssignmentComponent implements OnInit {
 
-  constructor() { }
+  assignmentList:any
+  constructor(
+    private as: AssignmentService,
+  ) { }
 
   ngOnInit(): void {
+    this.as.getAssignment().subscribe(
+      assignment => {
+        this.assignmentList = assignment
+        console.log(this.assignmentList);
+      }
+    )
   }
 
 }
