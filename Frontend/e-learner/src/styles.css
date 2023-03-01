@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700&display=swap');
 
 :root {
-  --violet: #6c5ce7;
-  --pink: #FC427B;
+  --violet: #1AC6E5;
+  --pink: #13EC50;
   --gradient: linear-gradient(90deg, var(--violet), var(--pink));
 }
 
@@ -425,8 +425,9 @@ header.major {
 }
 
 .review .box .student .student-info h3 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #333;
+  padding-left: 30px;
 }
 
 .review .box .student .student-info span {

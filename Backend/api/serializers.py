@@ -6,11 +6,6 @@ class StringSerializer(serializers.StringRelatedField):
     def to_internal_value(self, value):
         return value
     
-class MaterialSerializer(serializers.ModelSerializer):
-    material = serializers.FileField(allow_empty_file=False)
-    class Meta:
-        model = Material
-        fields = ("__all__")
 
 class QuestionSerializer(serializers.ModelSerializer):
     choices = StringSerializer(many=True)
@@ -18,6 +13,25 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ('id', 'choices', 'question', 'order')
+
+class MaterialSerializer(serializers.ModelSerializer):
+    material = serializers.FileField(allow_empty_file=False)
+    uploader = serializers.CharField(source="uploader.email", read_only=True)
+    class Meta:
+        model = Material
+        fields = ("__all__")
+    
+    def create(self, request):
+        data = request.data
+        print(data)
+        material = Material()
+        uploader = User.objects.get(email__exact =data['uploader'])
+        material.uploader = uploader
+        material.description = data['description']
+        material.material = data['material']
+        material.save()
+        return material
+        
 
 class AssignmentSerializer(serializers.ModelSerializer):
     questions = serializers.SerializerMethodField()
@@ -34,7 +48,8 @@ class AssignmentSerializer(serializers.ModelSerializer):
         data = request.data
         print(data)
         assignment = Assignment()
-        educator = User.objects.get(id =data['educator'])
+        educator = User.objects.get(email__exact =data['educator'])
+        print(educator)
         assignment.educator = educator
         assignment.title = data['title']
         assignment.classes = data['classes']
@@ -72,7 +87,7 @@ class GradedAssignmentSerializer(serializers.ModelSerializer):
         data = request.data
         print(data)
         assignment = Assignment.objects.get(id=data['id'])
-        student = User.objects.get(email= data['email'])
+        student = User.objects.get(email__exact= data['email'])
 
         graded_asnt = GradedAssignment()
         graded_asnt.assignment = assignment

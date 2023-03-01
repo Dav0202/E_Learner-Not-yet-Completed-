@@ -9,13 +9,23 @@ from rest_framework.status import (
 )
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
 
-class MaterialView(ListCreateAPIView):
+class MaterialView(viewsets.ModelViewSet):
     serializer_class = MaterialSerializer
     
     def get_queryset(self):
         queryset = Material.objects.all()
         if queryset is not None:
             return queryset
+        
+    def create(self, request):
+        print(request.data)
+        serializer = MaterialSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            material = serializer.create(request)
+            if material:
+                return Response(status=HTTP_201_CREATED)
+            #else:
+        return Response(status= HTTP_400_BAD_REQUEST)
 
 class AssignmentViewSet(viewsets.ModelViewSet):
     serializer_class = AssignmentSerializer
@@ -36,9 +46,9 @@ class GradedAssignmentListView(ListAPIView):
 
     def get_queryset(self):
         queryset = GradedAssignment.objects.all()
-        username = self.request.query_params.get('username', None)
-        if username is not None:
-            queryset = queryset.filter(student__username = username)
+        email = self.request.query_params.get('email', None)
+        if email is not None:
+            queryset = queryset.filter(student__email = email)
         return queryset
 
 class GradedAssignmentCreateView(CreateAPIView):

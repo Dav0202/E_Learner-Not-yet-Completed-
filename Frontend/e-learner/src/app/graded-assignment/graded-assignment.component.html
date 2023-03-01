@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>course</title>
+
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+
+    <a href="#" class="logo">E-<span>Learner</span></a>
+
+    <nav class="navbar">
+      <a href="home.html">Home</a>
+      <a href="teacher.html">Assignments</a>
+      <a href="price.html">Games</a>
+      <a href="review.html">Materials</a>
+      <!--
+          <a href="course.html">Logout</a>
+          <a href="course.html">Register</a>
+      -->
+    </nav>
+
+  </header>
+
+<h1 class="heading"> Graded Assignments </h1>
+
+<!-- course section  -->
+
+<section class="review">
+
+  <div class="box" *ngFor="let item of grade">
+    <mat-card>
+      <div class="student">
+        <div class="student-info">
+          <mat-progress-spinner mode="determinate" [value]="item.grade">
+          </mat-progress-spinner>
+            <div class="info">
+                <h3>{{item.grade}}%</h3>
+            </div>
+        </div>
+        <i class="fas fa-quote-right"></i>
+    </div>
+    <p class="text">{{item.assignment}}</p>
+    </mat-card>
+  </div>
+
+</section>
+
+
+<!-- footer section  -->
+
+<section class="footer container" >
+
+  <div class="box-container">
+
+    <div class="box">
+      <h3>quick links</h3>
+      <a href="#">home</a>
+      <a href="#">course</a>
+      <a href="#">teacher</a>
+    </div>
+
+    <div class="box">
+      <h3>follow us</h3>
+      <a href="#">facebook</a>
+      <a href="#">twitter</a>
+      <a href="#">instagram</a>
+    </div>
+
+    <div class="box">
+      <h3>contact us</h3>
+      <p> <i class="fas fa-phone"></i> +123-456-7890 </p>
+      <p> <i class="fas fa-envelope"></i> studysmart@gmail.com </p>
+      <p> <i class="fas fa-map-marker-alt"></i> mumbai, india - 400104 </p>
+    </div>
+
+  </div>
+
+  <div class="credit"> 2023 | all rights reserved </div>
+
+</section>
+
+</div>
+
+</body>
+</html>

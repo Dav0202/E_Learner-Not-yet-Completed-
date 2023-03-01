@@ -1,3 +1,5 @@
+import { MaterialsComponent } from './materials/materials.component';
+import { GradedAssignmentComponent } from './graded-assignment/graded-assignment.component';
 import { AssignmentComponent } from './assignment/assignment.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -12,7 +14,10 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'assignment', component: AssignmentComponent},
   { path: 'create-assignment', component: CreateAssignmentComponent},
+  { path: 'scores', component: GradedAssignmentComponent},
   { path: `assignment/:id`, component: DetailAssignmentComponent},
+  { path: 'material', component: MaterialsComponent},
+
 ];
 
 @NgModule({

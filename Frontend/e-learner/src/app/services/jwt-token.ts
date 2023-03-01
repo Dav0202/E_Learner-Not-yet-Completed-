@@ -1,6 +1,10 @@
 export interface JwtToken {
-}
-interface MyToken {
-  refresh: string;
-  access: string;
+  educator: boolean;
+  exp: number;
+  iat: number;
+  jti: string;
+  student: boolean;
+  token_type: string;
+  user_id: number;
+  email: string;
 }

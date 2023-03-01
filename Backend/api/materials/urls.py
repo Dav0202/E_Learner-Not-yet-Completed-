@@ -1,6 +1,9 @@
 from api.views import MaterialView
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path("", MaterialView.as_view()),
-]
+router = DefaultRouter()
+router.register(
+    r'', MaterialView, basename='assignments'
+)
+
+urlpatterns = router.urls

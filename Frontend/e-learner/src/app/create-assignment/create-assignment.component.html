@@ -30,7 +30,7 @@
             </mat-card-title>
             <form [formGroup]="questionForm" (ngSubmit)="submitQ()">
               <div>
-                <mat-card-subtitle>
+
                   <mat-form-field appearance="fill">
                     <mat-label>Title</mat-label>
                     <input formControlName="title" matInput>
@@ -55,10 +55,9 @@
                   {{ option.name }}
                 </option>
               </select>
-                </mat-card-subtitle>
               </div>
               <ng-container formArrayName="question">
-                <mat-card>
+
                   <ng-container [formGroupName]="i" *ngFor="let questions of question.controls; let i=index">
                     <div>
                       <mat-form-field appearance="fill">
@@ -96,9 +95,6 @@
               <button mat-stroked-button color="Basic" type='button' (click)="removeQuestion(i)" >Remove Questions</button>
             </div>
                   </ng-container>
-
-
-                </mat-card>
               </ng-container>
               <div class="example-button-row">
                 <button mat-stroked-button color="Basic" type="submit">Submit</button>

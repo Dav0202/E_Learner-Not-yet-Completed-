@@ -1,9 +1,38 @@
 from rest_framework import serializers
 from allauth.account.adapter import get_adapter
 from rest_auth.registration.serializers import RegisterSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import User, Student, Educator
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.exceptions import InvalidToken
 
-from .models import User
+class CookieTokenRefreshSerializer(TokenRefreshSerializer):
+    refresh = None
+    def validate(self, attrs):
+        attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
+        if attrs['refresh']:
+            return super().validate(attrs)
+        else:
+            raise InvalidToken('No valid token found in cookie \'refresh_token\'')
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['email'] = user.email
+        token['student'] = user.is_student
+        token['educator'] = user.is_educator
+        # ...
+        return token
+    
+    def finalize_response(self, request, response, *args, **kwargs):
+      if response.data.get('refresh'):
+          cookie_max_age = 300 # 14 days
+          response.set_cookie('refresh_token', response.data['refresh'], max_age=cookie_max_age, httponly=True )
+          del response.data['refresh']
+      return super().finalize_response(request, response, *args, **kwargs)
 
 class StringSerializer(serializers.StringRelatedField):
     def to_internal_value(self, value):

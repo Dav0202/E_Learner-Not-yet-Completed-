@@ -21,6 +21,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from users.views import MyTokenObtainPairView, CookieTokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,6 +32,6 @@ urlpatterns = [
     path('rest-auth/', include('rest_auth.urls')),
     path('user/registration/', include('rest_auth.registration.urls')),
     path('accounts/', include('allauth.urls')),
-    path('user/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('user/login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('user/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('user/login/refresh/', CookieTokenRefreshView.as_view(), name='token_refresh'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

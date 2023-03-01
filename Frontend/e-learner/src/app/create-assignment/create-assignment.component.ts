@@ -1,5 +1,8 @@
+import { NewUserService } from './../services/new-user.service';
+import { CookieService } from 'ngx-cookie-service';
 import { AssignmentService } from './../services/assignment.service';
 import { Component, OnInit } from '@angular/core';
+
 import { FormControl,
   FormGroup,
   FormBuilder,
@@ -41,6 +44,8 @@ export class CreateAssignmentComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private as: AssignmentService,
+    private cookieservice: CookieService,
+    private ns: NewUserService
   ) { }
 
   ngOnInit(): void {
@@ -99,10 +104,19 @@ export class CreateAssignmentComponent implements OnInit {
    console.log(this.question)
   }
 
-  submitQ(){
-    //this.setteacher()
-    console.log(this.questionForm.value)
+  setteacher(){
+    let decryptcookies = this.ns.toDecryptStudentEducator()
+    console.log(decryptcookies)
+    if (decryptcookies.educator === "true" && decryptcookies.student === "false") {
+      this.questionForm.patchValue({
+        educator: JSON.parse(decryptcookies.email)
+      });
+    }
+  }
 
-    //this.as.createAssignment(this.questionForm.value,token).subscribe()
+  submitQ(){
+    this.setteacher()
+    console.log(this.questionForm.value)
+    this.as.createAssignment(this.questionForm.value).subscribe()
   }
 }

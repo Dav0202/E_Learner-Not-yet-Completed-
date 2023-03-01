@@ -78,13 +78,17 @@ export class LoginComponent implements OnInit {
 
   login(){
     console.log(this.loginForm.value)
-    this.ns.login(this.loginForm.value).subscribe(
-      token => {
-        if (token) {
-          console.log(this.ns.getAuthInfo())
-        }
-      }
-    )
+    this.ns.login(this.loginForm.value).subscribe()
+      //res => {
+      //  console.log('response headers', res)
+        //localStorage.setItem('Token', res.access )
+        //localStorage.setItem('Refresh', res.refresh )
+
+        //localStorage.setItem('Student', JSON.stringify(decoded.student) )
+        //localStorage.setItem('Educator', JSON.stringify(decoded.educator) )
+        //console.log(res)
+     // }
+//)
   }
 }
 

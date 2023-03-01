@@ -4,6 +4,8 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AssignmentService } from '../services/assignment.service';
 import { MatStepper } from "@angular/material/stepper";
 import { FormBuilder, FormGroup, Validators, NgForm, FormGroupDirective, FormControl, FormArray } from '@angular/forms';import { pluck } from "rxjs/operators";
+import { NewUserService } from '../services/new-user.service';
+
 
 @Component({
   selector: 'app-detail-assignment',
@@ -26,6 +28,7 @@ export class DetailAssignmentComponent implements OnInit {
     private as: AssignmentService,
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
+    private ns: NewUserService
   ){ }
   isLinear = false;
   questionForm!:FormGroup
@@ -61,15 +64,23 @@ export class DetailAssignmentComponent implements OnInit {
 
   }
 
+  setstudent(){
+    let decryptcookies = this.ns.toDecryptStudentEducator()
+    console.log(decryptcookies)
+    if (decryptcookies.educator === "false" && decryptcookies.student === "true") {
+      return JSON.parse(decryptcookies.email)
+    }
+  }
+
   submit(){
     this.questionForm = this.fb.group({
-      //username: [this.cookieService.get('user'),[Validators.required]],
+      email: this.setstudent(),
       id: [this.assignmentdetail['id'], Validators.required],
       answers: [this.assignmentanswer, Validators.required],
     });
     this.assignmentanswer.push(this.answer)
-    //this.as.createdGradedAssignment(this.questionForm.value,token).subscribe()
-    console.log(this.assignmentanswer)
+    this.as.createdGradedAssignment(this.questionForm.value).subscribe()
+    console.log(this.questionForm.value)
     this.snackBar.open('Assignment submited', 'Close', {
       duration: 3000,
       verticalPosition:this.verticalPosition

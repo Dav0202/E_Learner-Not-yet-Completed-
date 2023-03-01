@@ -1,5 +1,5 @@
 import { MatStepperModule} from '@angular/material/stepper';
-import { TokenInterceptor } from './services/jwt-interceptor';
+import { TokenInterceptor, } from './services/jwt-interceptor';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,6 +21,13 @@ import { CreateAssignmentComponent } from './create-assignment/create-assignment
 import { DetailAssignmentComponent } from './detail-assignment/detail-assignment.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { CookieService } from 'ngx-cookie-service';
+import { GradedAssignmentComponent } from './graded-assignment/graded-assignment.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MaterialsComponent } from './materials/materials.component';
+import { MatIconModule } from '@angular/material/icon';
+
 
 @NgModule({
   declarations: [
@@ -29,7 +36,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     LoginComponent,
     AssignmentComponent,
     CreateAssignmentComponent,
-    DetailAssignmentComponent
+    DetailAssignmentComponent,
+    GradedAssignmentComponent,
+    MaterialsComponent
   ],
   imports: [
     BrowserModule,
@@ -45,12 +54,17 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     HttpClientModule,
     MatStepperModule,
     MatRadioModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatProgressBarModule
 
   ],
   providers: [
     {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher},
-    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    CookieService,
+
   ],
   bootstrap: [AppComponent]
 })

@@ -15,46 +15,24 @@ export class TokenInterceptor implements HttpInterceptor {
   ) { }
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     request = request.clone({
+      withCredentials: true,
+    });
+    request = request.clone({
       setHeaders: {
         Authorization: `Bearer ${this.auth.getToken()}`
       }
     });
     return next.handle(request).pipe(
-      tap(
-        {
-          next:(event: HttpEvent<any>) => {
-            if (event instanceof HttpResponse) {
-              const url:string = 'http://127.0.0.1:8000/user/login/refresh/'
-
-              this.http.post<any>(url, this.auth.refreshToken(), this.auth.getAuthInfo()).pipe(
-                map(
-                  res => {
-                    localStorage.setItem('Token', res.access )
-                  }
-                )
-              )
-
-            }
-          },
-          error: (err: any) => {
-            if (err instanceof HttpErrorResponse) {
-              if (err.status === 401) {
-                const url:string = 'http://127.0.0.1:8000/user/login/refresh/'
-
-                this.http.post<any>(url, this.auth.refreshToken(), this.auth.getAuthInfo()).pipe(
-                  map(
-                    res => {
-                      localStorage.setItem('Token', res.access )
-                    }
-                  )
-                )
-              }
-            }
-          }
-        }
-      )
+      //tap(
+      //  (
+      //    ((ev: HttpEvent<any>) => {
+      //      console.log("got an event",ev)
+      //      if (ev instanceof HttpResponse) {
+      //        console.log('event of type response', ev);}
+      //  }
+      //  )
+      //)
+      //)
     )
   }
-
-
 }
