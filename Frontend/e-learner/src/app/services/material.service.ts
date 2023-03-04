@@ -8,24 +8,10 @@ import { Observable } from 'rxjs';
 export class MaterialService {
   constructor(private http: HttpClient,
     ) {}
-  private baseUrl = 'http://localhost:8000/materials/';
 
-  upload(file: File): Observable<HttpEvent<any>> {
-    const formData: FormData = new FormData();
 
-    formData.append('file', file);
-    console.log(formData)
-
-    const req = new HttpRequest('POST', `${this.baseUrl}`, formData, {
-      reportProgress: true,
-      responseType: 'json'
-    });
-
-    return this.http.request(req);
-  }
-
-  getFiles(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/files`);
+  getmaterial(): Observable<any>{
+    return this.http.get<any>('http://localhost:8000/materials/')
   }
 
   postdata(formData:any): Observable<any>{

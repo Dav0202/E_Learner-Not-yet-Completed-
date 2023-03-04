@@ -1,7 +1,7 @@
 import { NewUserService } from './../services/new-user.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AssignmentService } from './../services/assignment.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
 
 import { FormControl,
   FormGroup,
@@ -45,7 +45,8 @@ export class CreateAssignmentComponent implements OnInit {
     private fb: FormBuilder,
     private as: AssignmentService,
     private cookieservice: CookieService,
-    private ns: NewUserService
+    public ns: NewUserService,
+    private renderer: Renderer2,
   ) { }
 
   ngOnInit(): void {
@@ -118,5 +119,32 @@ export class CreateAssignmentComponent implements OnInit {
     this.setteacher()
     console.log(this.questionForm.value)
     this.as.createAssignment(this.questionForm.value).subscribe()
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  scrollFunction(event:any){
+    if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+      const container = document.getElementById('navbar');
+      this.renderer.addClass(container, "fixed-top");
+      this.renderer.addClass(document.body, "header-small")
+      this.renderer.addClass(document.body, "body-top-padding");
+    } else {
+      const container = document.getElementById('navbar');
+      this.renderer.removeClass(container,"fixed-top" )
+      this.renderer.removeClass(document.body, "header-small")
+      this.renderer.removeClass(document.body,"body-top-padding" )
+    }
+  }
+
+
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event:any){
+    const container = document.getElementById('navbarSupportedContent');
+    let w = event.target.innerWidth;
+    if(w>=992) {
+      this.renderer.removeClass(document.body,'sidebar-open')
+      this.renderer.removeClass(container, "show")
+    }
   }
 }

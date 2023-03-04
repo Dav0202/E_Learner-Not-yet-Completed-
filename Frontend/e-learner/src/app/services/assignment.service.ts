@@ -29,7 +29,7 @@ export class AssignmentService {
     return this.http.get( url2, requestoption)
   }
 
-  getAssignmentDetail(id:number):Observable<any>{
+  getAssignmentDetail(id:any):Observable<any>{
     const headers2 = {
       'Content-Type': 'application/json',
     }

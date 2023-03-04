@@ -14,6 +14,7 @@ import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/materi
 import { MatCard, MatCardModule } from "@angular/material/card";
 import { AssignmentComponent } from './assignment/assignment.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -27,6 +28,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MaterialsComponent } from './materials/materials.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MaterialViewComponent } from './material-view/material-view.component';
+import { Error404Component } from './error404/error404.component';
+import { DropdownDirective } from './homepage/dropdown.directive';
 
 
 @NgModule({
@@ -38,7 +42,10 @@ import { MatIconModule } from '@angular/material/icon';
     CreateAssignmentComponent,
     DetailAssignmentComponent,
     GradedAssignmentComponent,
-    MaterialsComponent
+    MaterialsComponent,
+    MaterialViewComponent,
+    Error404Component,
+    DropdownDirective,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +64,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatMenuModule
 
   ],
   providers: [

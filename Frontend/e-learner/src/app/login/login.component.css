@@ -99,7 +99,6 @@ input[type="password"]{
 }
 
 mat-card {
-  max-width: 400px;
   margin: 2em auto;
   text-align: center;
 }
@@ -116,7 +115,7 @@ mat-form-field {
 	position: relative;
 	overflow: hidden;
 	width: 768px;
-  height: 700px;
+  height: 800px;
 	max-width: 100%;
 	min-height: 480px;
 }
@@ -175,12 +174,12 @@ input[type="radio"]{
 }
 #option-1:checked:checked ~ .option-1,
 #option-2:checked:checked ~ .option-2{
-  border-color: #FF4B2B;
+  border-color: #13EC50;
   background: #fff;
 }
 #option-1:checked:checked ~ .option-1 .dot,
 #option-2:checked:checked ~ .option-2 .dot{
-  background:#FF4B2B;
+  background:#13EC50;
 }
 #option-1:checked:checked ~ .option-1 .dot::before,
 #option-2:checked:checked ~ .option-2 .dot::before{
@@ -194,7 +193,7 @@ input[type="radio"]{
 }
 #option-1:checked:checked ~ .option-1 span,
 #option-2:checked:checked ~ .option-2 span{
-  color: #FF4B2B;
+  color:#13EC50;
 
 }
 
