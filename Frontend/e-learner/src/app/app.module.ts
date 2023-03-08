@@ -31,7 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MaterialViewComponent } from './material-view/material-view.component';
 import { Error404Component } from './error404/error404.component';
 import { DropdownDirective } from './homepage/dropdown.directive';
-
+import { SearchpipePipe } from './pipes/searchpipe.pipe';
 
 @NgModule({
   declarations: [
@@ -46,6 +46,7 @@ import { DropdownDirective } from './homepage/dropdown.directive';
     MaterialViewComponent,
     Error404Component,
     DropdownDirective,
+    SearchpipePipe,
   ],
   imports: [
     BrowserModule,

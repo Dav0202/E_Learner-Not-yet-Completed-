@@ -84,19 +84,6 @@ input[type="radio"]{
   display: none;
 }
 
-input[type="email"]{
-  width: 100%;
-  padding: 3px 6px;
-  margin: 8px 0;
-  box-sizing: border-box;
-
-}
-input[type="password"]{
-  width: 100%;
-  padding: 3px 6px;
-  margin: 8px 0;
-  box-sizing: border-box;
-}
 
 mat-card {
   margin: 2em auto;
@@ -105,6 +92,7 @@ mat-card {
 
 mat-form-field {
   display: block;
+  height: 85px;
 }
 
 .container {

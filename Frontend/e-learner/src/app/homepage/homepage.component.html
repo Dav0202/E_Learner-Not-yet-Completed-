@@ -25,22 +25,32 @@
       <div [ngClass]="{'show':r.isOpen}" class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
         <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
           <li class="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
-              <h2><a class="nav-link nav-item" [routerLink]="['/']" routerLinkActive="router-link-active">E - Learner</a></h2>
-            <button class="navbar-toggler close-button" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span (click)="closemenu()" class="material-symbols-rounded">
+            <button class="navbar-toggler close-button" type="button" data-toggle="collapse"
+              data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+              aria-label="Toggle navigation">
+              <span class="material-symbols-rounded">
                 close
-                </span>
+              </span>
             </button>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/']" routerLinkActive="router-link-active">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/assignment']" routerLinkActive="router-link-active">Assignments</a>
+            <a class="nav-link" *ngIf="ns.setstudent()" [routerLink]="['/assignment']" routerLinkActive="router-link-active">Assignments</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/material']" routerLinkActive="router-link-active">Materials</a>
+            <a class="nav-link" *ngIf="ns.setstudent()" [routerLink]="['/scores']" routerLinkActive="router-link-active">Scores</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" *ngIf="ns.setteacher()" [routerLink]="['/create-assignment']" routerLinkActive="router-link-active">SetTest</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" *ngIf="ns.getToken()" [routerLink]="['/material']" routerLinkActive="router-link-active">Materials</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" *ngIf="!ns.setteacher() && !ns.setstudent()" href="#case-studies-section">Games</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" *ngIf="ns.getToken(); else auth" (click)="ns.logout()">Logout</a>

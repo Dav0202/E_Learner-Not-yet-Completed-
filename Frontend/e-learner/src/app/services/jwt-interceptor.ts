@@ -1,3 +1,4 @@
+import { EventBusService } from './event-bus.service';
 import { NewUserService } from './new-user.service';
 import {
   HttpInterceptor, HttpHandler, HttpEvent, HttpClient,
@@ -9,7 +10,6 @@ import { Observable, from, throwError } from 'rxjs';
 import { tap, shareReplay, map, catchError, mergeMap, switchMap } from 'rxjs/operators';
 import { BehaviorSubject } from "rxjs";
 
-
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
@@ -17,8 +17,10 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(
     public auth: NewUserService,
     private http: HttpClient,
+    private eventbusservice: EventBusService
   ) { }
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<any> {
+
     request = request.clone({
       withCredentials: true,
     });
@@ -29,43 +31,24 @@ export class TokenInterceptor implements HttpInterceptor {
     });
 
     return next.handle(request).pipe(
-      catchError((error) => {
-        if (
-          error instanceof HttpErrorResponse &&
-          !request.url.includes('login') &&
-          error.status === 401
-        ) {
-          return this.handle401Error(request, next);
+      catchError((err) => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 403) {
+            console.log('error 403')
+            this.auth.refreshToken().subscribe()
+
+          } //else if (err.status === 401){
+            //console.log('error 401')
+
+          //}else{
+          //  console.log('error all errors')
+          //  this.auth.logout()
+          //}
         }
-        return throwError(() => error);
+        return throwError(() => err);
       })
     );
-
   }
 
-  private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
-    if (!this.isRefreshing) {
-      this.isRefreshing = true;
-      let loggedin = this.auth.getToken()
-      if (loggedin) {
-        console.log('come on')
-        return this.auth.refreshToken().pipe(
-          switchMap(() => {
-            this.isRefreshing = false;
-            return next.handle(request);
-          }),
-          catchError((error) => {
-            this.isRefreshing = false;
 
-            if (error.status == '403' && error.status == '401') {
-              this.auth.logout()
-            }
-            return throwError(() => error);
-          })
-        );
-      }
-
-    }
-    return next.handle(request);
-    }
 }

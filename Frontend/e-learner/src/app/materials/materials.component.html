@@ -19,19 +19,16 @@
         <div class="navbar-brand-wrapper d-flex w-100">
           <h3><a class="nav-link nav-item" [routerLink]="['/']" routerLinkActive="router-link-active">E - Learner</a>
           </h3>
-          <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
+          <button appDropdown #r="appDropDown" class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent">
             <span class="material-symbols-rounded">
               menu
             </span>
           </button>
         </div>
-        <div class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
+        <div [ngClass]="{'show':r.isOpen}" class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
           <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
             <li class="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
-              <div class="navbar-collapse-logo">
-                <img src="../../assets/images/Group2.svg" alt="">
-              </div>
               <button class="navbar-toggler close-button" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -42,11 +39,19 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/']" routerLinkActive="router-link-active">Home <span
-                  class="sr-only">(current)</span></a>
+              <a class="nav-link" [routerLink]="['/']" routerLinkActive="router-link-active">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/assignment']" routerLinkActive="router-link-active">Assignments</a>
+              <a class="nav-link" *ngIf="ns.setstudent()" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact:true}" [routerLink]="['/assignment']">Assignments</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" *ngIf="ns.setstudent()" [routerLink]="['/scores']"
+                routerLinkActive="router-link-active">Scores</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" *ngIf="ns.setteacher()" [routerLink]="['/create-assignment']"
+                routerLinkActive="router-link-active">SetTest</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" [routerLink]="['/material']" routerLinkActive="router-link-active">Materials</a>

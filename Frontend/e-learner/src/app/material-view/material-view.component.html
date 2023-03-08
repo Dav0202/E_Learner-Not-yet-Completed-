@@ -17,21 +17,18 @@
     <nav class="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
       <div class="container">
         <div class="navbar-brand-wrapper d-flex w-100">
-          <h3><a class="nav-link nav-item" [routerLink]="['/']" routerLinkActive="router-link-active">E - Learner</a>
+          <h3><a class="nav-link nav-item" [routerLink]="['/']" >E - Learner</a>
           </h3>
-          <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
+          <button appDropdown #r="appDropDown" class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent">
             <span class="material-symbols-rounded">
               menu
             </span>
           </button>
         </div>
-        <div class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
+        <div [ngClass]="{'show':r.isOpen}" class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
           <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
             <li class="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
-              <div class="navbar-collapse-logo">
-                <img src="../../assets/images/Group2.svg" alt="">
-              </div>
               <button class="navbar-toggler close-button" type="button" data-toggle="collapse"
                 data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -42,21 +39,29 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/']" routerLinkActive="router-link-active">Home <span
-                  class="sr-only">(current)</span></a>
+              <a class="nav-link" [routerLink]="['/']" >Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/assignment']" routerLinkActive="router-link-active">Assignments</a>
+              <a class="nav-link" *ngIf="ns.setstudent()" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact:true}" [routerLink]="['/assignment']">Assignments</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/material']" routerLinkActive="router-link-active">Materials</a>
+              <a class="nav-link" *ngIf="ns.setstudent()" [routerLink]="['/scores']"
+                >Scores</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" *ngIf="ns.getToken(); else auth" (click)="ns.logout()">Logout</a>
+              <a class="nav-link"  *ngIf="ns.setteacher()" [routerLink]="['/create-assignment']"
+                >SetTest</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLinkActive="active" [routerLink]="['/material']" >Materials</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link"  *ngIf="ns.getToken(); else auth" (click)="ns.logout()">Logout</a>
             </li>
             <ng-template #auth>
               <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/login']" routerLinkActive="router-link-active">Login</a>
+                <a class="nav-link" [routerLink]="['/login']" >Login</a>
               </li>
             </ng-template>
             <li class="nav-item btn-contact-us pl-4 pl-lg-0">
@@ -69,8 +74,22 @@
   </header>
   <div class="content-wrapper">
     <div class="container">
+      <mat-card *ngIf="ns.setteacher()">
+        <div class="card">
+          <div>
+          <h4 class="font-weight-semibold">Want to Upload Material to help better learning?<br>Upload Here</h4>
+            <button [routerLink]="['/material-upload']"  class="btn btn-info mr-1">Upload Now</button>
+          </div>
+        </div>
+      </mat-card>
+      <mat-card>
+        <form class="d-flex">
+          <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="searchTerm2"
+            [(ngModel)]="searchTerm2">
+        </form>
+      </mat-card>
       <section class="course" >
-        <div class="box" *ngFor="let file of material">
+        <div class="box" *ngFor="let file of material | searchpipe:searchTerm2">
         <div class="card">
             <div class="card-body p-0">
               <div >

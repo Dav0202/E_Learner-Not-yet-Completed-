@@ -17,6 +17,7 @@ export class MaterialViewComponent implements OnInit {
   ) { }
 
   material:any;
+  searchTerm2: any = '';
 
   ngOnInit(): void {
     this.ms.getmaterial().subscribe(

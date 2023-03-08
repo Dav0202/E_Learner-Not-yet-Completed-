@@ -10,6 +10,8 @@ import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
 })
 export class AssignmentComponent implements OnInit {
 
+  searchTerm: any = '';
+
   assignment:any
   constructor(
     private as: AssignmentService,
@@ -39,8 +41,6 @@ export class AssignmentComponent implements OnInit {
       this.renderer.removeClass(document.body,"body-top-padding" )
     }
   }
-
-
 
   @HostListener('window:resize', ['$event'])
   onResize(event:any){

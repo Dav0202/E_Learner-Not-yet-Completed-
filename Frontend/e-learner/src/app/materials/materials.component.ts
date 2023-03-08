@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { NewUserService } from './../services/new-user.service';
 import { FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import { MaterialService } from './../services/material.service';
@@ -17,6 +18,7 @@ export class MaterialsComponent implements OnInit {
     private formBuilder: FormBuilder,
     public ns: NewUserService,
     private renderer: Renderer2,
+    private router: Router
   ) { }
 
   fileName = '';
@@ -63,10 +65,10 @@ export class MaterialsComponent implements OnInit {
     formData.append('description', this.myForm.get('description')!.value);
     console.log(this.myForm.value);
     this.uploadService.postdata(formData).subscribe(res => {
-      console.log(res)
         if (res.type == HttpEventType.UploadProgress) {
           this.uploadProgress = Math.round(100 * (res.loaded / res.total));
         }
+        this.router.navigate(['/', 'homepage'])
     })
   }
 

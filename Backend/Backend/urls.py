@@ -22,6 +22,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from users.views import MyTokenObtainPairView, CookieTokenRefreshView
+from rest_auth.views import PasswordResetView, PasswordResetConfirmView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,9 +30,7 @@ urlpatterns = [
     path('assignments/', include('api.assignment.urls')),
     path('scores/', include('api.graded_assignment.urls')),
     path('materials/', include('api.materials.urls')),
-    path('rest-auth/', include('rest_auth.urls')),
     path('user/registration/', include('rest_auth.registration.urls')),
-    path('accounts/', include('allauth.urls')),
     path('user/login/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('user/login/refresh/', CookieTokenRefreshView.as_view(), name='token_refresh'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

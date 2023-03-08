@@ -42,16 +42,6 @@ export class NewUserService {
   private jwtToken!: JwtToken
   private refreshTokenTimeout!: NodeJS.Timeout;
 
-  newUsers(user: any): Observable<any> {
-    const headers2 = {
-      'Content-Type': 'application/json',
-    }
-    const requestoption = {
-      headers: new HttpHeaders(headers2)
-    }
-    const url: string = 'http://localhost:8000/user/registration/'
-    return this.http.post<any>(url, user, requestoption)
-  }
 
 
   login(user: any): Observable<any> {
@@ -69,7 +59,6 @@ export class NewUserService {
           this.jwtToken = decode(res.access)
           console.log(this.jwtToken)
           localStorage.setItem('Token', res.access)
-          localStorage.setItem('exp', JSON.stringify(this.jwtToken.exp))
           this.encryptMode = true;
           this.conversionOutputemail = CryptoJS.AES.encrypt(JSON.stringify(this.jwtToken.email), this.cookie.get("RTY_ft")).toString();
           this.conversionOutputeducator = CryptoJS.AES.encrypt(JSON.stringify(this.jwtToken.educator), this.cookie.get("RTY_ft")).toString();
@@ -106,6 +95,8 @@ export class NewUserService {
 
   logout(){
     localStorage.clear()
+    this.cookie.deleteAll()
+    location.reload()
     this.router.navigate(['/', 'homepage'])
   }
 
@@ -132,13 +123,14 @@ export class NewUserService {
   }
 
   refreshToken() {
+    console.log('Access Token expired Refresh begin')
     return this.http.post<any>('http://localhost:8000/user/login/refresh/', {}, { withCredentials: true })
       .pipe(map((res) => {
-        console.log('Access Token expired Refresh begin')
         this.jwtToken = decode(res.access)
         localStorage.setItem('Token', res.access)
-        this.startRefreshTokenTimer();
+        location.reload()
       }));
+
   }
 
 checkexp(){
@@ -171,6 +163,14 @@ checkexp(){
   setteacher(){
     let decryptcookies = this.toDecryptStudentEducator()
     if (decryptcookies.educator === "true" && decryptcookies.student === "false") {
+      return true
+    }
+    return false
+  }
+
+  setstudent(){
+    let decryptcookies = this.toDecryptStudentEducator()
+    if (decryptcookies.educator === "false" && decryptcookies.student === "true") {
       return true
     }
     return false

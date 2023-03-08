@@ -1,8 +1,12 @@
+import { RegisterUserService } from './../services/register-user.service';
 import { Directive, Renderer2, ElementRef, OnInit, Component } from '@angular/core';
 import { Router } from '@angular/router';
-import {FormControl, FormBuilder, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
+import { FormControl, FormBuilder, FormGroupDirective, NgForm, Validators, AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { NewUserService } from '../services/new-user.service';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { matchValidator } from './form-validators';
+
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -19,53 +23,75 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class LoginComponent implements OnInit {
 
   matcher = new MyErrorStateMatcher();
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   constructor(
     private renderer: Renderer2, private el: ElementRef,
     private formBuilder: FormBuilder,
+    private ns: NewUserService,
+    private snackBar: MatSnackBar,
     private router: Router,
-    private ns: NewUserService
-    ) { }
+    private rs: RegisterUserService
+  ) { }
 
   ngOnInit(): void {
 
   }
   signupForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
-    password1: ['', [Validators.required, Validators.minLength(6)]],
-    password2: ['', [Validators.required, Validators.minLength(6)]],
-    username: ['',[Validators.required]],
-    first_name: ['',[Validators.required]],
-    last_name: ['',[Validators.required]],
+    password1: ['',
+    [Validators.required,
+    Validators.minLength(6),
+    Validators.maxLength(25),
+    matchValidator('password2', true)
+    ]
+  ],
+    password2: ['', [Validators.required, matchValidator('password1')],],
+    username: ['', [Validators.required]],
+    first_name: ['', [Validators.required]],
+    last_name: ['', [Validators.required]],
     is_student: [null, [Validators.required]],
     is_educator: [null, [Validators.required]],
   });
 
-  signup(){
-    this.ns.newUsers(this.signupForm.value).subscribe()
+
+  signup() {
+    this.rs.newUsers(this.signupForm.value).subscribe(
+      {
+        next: (res) => {
+          const container = document.getElementById('container');
+          this.renderer.removeClass(container, "right-panel-active");
+          console.log(res)
+          this.snackBar.open('Account Created Sucessfully', 'Close', {
+            duration: 4000,
+            verticalPosition: this.verticalPosition,
+          })
+        }
+      }
+    )
     console.log(this.signupForm.value)
   }
 
-  onClickeducator(){
+  onClickeducator() {
     this.signupForm.patchValue({
       is_student: false,
       is_educator: true
     });
   }
 
-  onClickstudent(){
+  onClickstudent() {
     this.signupForm.patchValue({
       is_student: true,
       is_educator: false
     });
   }
 
-  switch_right(){
+  switch_right() {
     const container = document.getElementById('container');
     this.renderer.addClass(container, "right-panel-active");
   }
 
-  switch_left(){
+  switch_left() {
     const container = document.getElementById('container');
     this.renderer.removeClass(container, "right-panel-active");
   }
@@ -76,19 +102,29 @@ export class LoginComponent implements OnInit {
   });
 
 
-  login(){
+  login() {
     console.log(this.loginForm.value)
-    this.ns.login(this.loginForm.value).subscribe()
-      //res => {
-      //  console.log('response headers', res)
-        //localStorage.setItem('Token', res.access )
-        //localStorage.setItem('Refresh', res.refresh )
+    this.ns.login(this.loginForm.value).subscribe({
+      error: (err) => {
+        if (err.status === 401) {
+          this.snackBar.open('Invalid Username or Password', 'Close', {
+            duration: 4000,
+            verticalPosition: this.verticalPosition,
+          })
+        }
+      }
+    }
+    )
+    //res => {
+    //  console.log('response headers', res)
+    //localStorage.setItem('Token', res.access )
+    //localStorage.setItem('Refresh', res.refresh )
 
-        //localStorage.setItem('Student', JSON.stringify(decoded.student) )
-        //localStorage.setItem('Educator', JSON.stringify(decoded.educator) )
-        //console.log(res)
-     // }
-//)
+    //localStorage.setItem('Student', JSON.stringify(decoded.student) )
+    //localStorage.setItem('Educator', JSON.stringify(decoded.educator) )
+    //console.log(res)
+    // }
+    //)
   }
 }
 

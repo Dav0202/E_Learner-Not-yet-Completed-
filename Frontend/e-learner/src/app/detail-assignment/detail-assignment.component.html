@@ -19,50 +19,6 @@
         <div class="navbar-brand-wrapper d-flex w-100">
           <h3><a class="nav-link nav-item" [routerLink]="['/']" routerLinkActive="router-link-active">E - Learner</a>
           </h3>
-          <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent">
-            <span class="material-symbols-rounded">
-              menu
-            </span>
-          </button>
-        </div>
-        <div class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
-          <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
-            <li class="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
-              <div class="navbar-collapse-logo">
-                <img src="../../assets/images/Group2.svg" alt="">
-              </div>
-              <button class="navbar-toggler close-button" type="button" data-toggle="collapse"
-                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="material-symbols-rounded">
-                  close
-                </span>
-              </button>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/']" routerLinkActive="router-link-active">Home <span
-                  class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/assignment']" routerLinkActive="router-link-active">Assignments</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" [routerLink]="['/material']" routerLinkActive="router-link-active">Materials</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" *ngIf="ns.getToken(); else auth" (click)="ns.logout()">Logout</a>
-            </li>
-            <ng-template #auth>
-              <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/login']" routerLinkActive="router-link-active">Login</a>
-              </li>
-            </ng-template>
-            <li class="nav-item btn-contact-us pl-4 pl-lg-0">
-              <button class="btn btn-info" data-toggle="modal" data-target="#exampleModal">Contact Us</button>
-            </li>
-          </ul>
         </div>
       </div>
     </nav>

@@ -102,6 +102,3 @@ class Educator(models.Model):
 
     def __str__(self):
         return self.user.username
-#AdminLearner
-#AdminLearner@admin.com
-#Adminxx

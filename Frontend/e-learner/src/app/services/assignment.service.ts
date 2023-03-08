@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders  } from '@angular/common/http';
-import { map, Observable } from 'rxjs'
+import { BehaviorSubject, map, Observable } from 'rxjs'
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -13,6 +13,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AssignmentService {
+
+  private messageSource = new BehaviorSubject('');
+  currentMessage = this.messageSource.asObservable();
 
   constructor(
     private http: HttpClient
@@ -73,4 +76,7 @@ export class AssignmentService {
     return this.http.get( url2, requestoption)
   }
 
+  changeMessage(message: string) {
+    this.messageSource.next(message)
+  }
 }
