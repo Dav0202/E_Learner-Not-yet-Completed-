@@ -1,3 +1,6 @@
+"""
+    Create user and profile model for Database
+"""
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 
@@ -35,7 +38,12 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
+
 class User(AbstractBaseUser, PermissionsMixin):
+    """
+        class defining the user model
+    """
     first_name = models.CharField(max_length=100)
     email = models.EmailField(
         verbose_name='email address',
@@ -63,6 +71,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_login= models.DateTimeField(verbose_name='last login', auto_now=True)
     
     def __str__(self):
+        """
+            returns string representation od object
+        """
         return self.email
     
     objects = UserManager()
@@ -78,27 +89,29 @@ class User(AbstractBaseUser, PermissionsMixin):
         return True
 
 class Student(models.Model):
+    """
+        class defining the student profile model
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=30, default="I am a student Learning")
     REQUIRED_FIELDS = ['username']
 
     def __str__(self):
+        """
+            returns string representation od object
+        """
         return self.user.username
     
 class Educator(models.Model):
+    """
+        class defining the educator profile model
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='edu-pictures/', default="C:\\Users\\lenovo\\Desktop\\E_Learner\\Backend\\media\\edu-pictures\\default_image.png")
     current_institution = models.CharField(max_length=300)
-    
-#   def save(self):
-#       super().save()
-#   
-#       img = Image.open(self.profile_image.path)
-#   
-#       if img.height > 300 or img.width > 300:
-#           output_size = (300, 300)
-#           img.thumbnail(output_size)
-#           img.save(self.profile_image.path)
 
     def __str__(self):
+        """
+            returns string representation od object
+        """
         return self.user.username

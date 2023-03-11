@@ -79,12 +79,11 @@
 
           <form [formGroup]="myForm" (ngSubmit)="submit()">
 
-
             <mat-form-field appearance="fill">
               <mat-label>Description</mat-label>
               <input formControlName="description" type="text" matInput="">
-              <mat-error *ngIf="myForm.hasError('required')">
-                Username is <strong>required</strong>
+              <mat-error *ngIf="myForm.get('description')?.hasError('required')">
+                Description is <strong>required</strong>
               </mat-error>
             </mat-form-field>
 

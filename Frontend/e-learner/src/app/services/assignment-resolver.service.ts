@@ -14,8 +14,7 @@ export class AssignmentResolverService implements Resolve<any> {
   ) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):Observable<any> {
-    let id = route.paramMap.get('id')
-    return this.as.getAssignmentDetail(id);
+    return null as any
   }
 
 }

@@ -14,7 +14,11 @@ export class RegisterUserService {
     this.httpClient = new HttpClient(handler);
   }
 
-
+  /**
+   * send new user information to api
+   * @param user user information
+   * @returns observable of response
+   */
   newUsers(user: any): Observable<any> {
     const headers2 = {
       'Content-Type': 'application/json',
@@ -22,7 +26,7 @@ export class RegisterUserService {
     const requestoption = {
       headers: new HttpHeaders(headers2)
     }
-    const url: string = 'http://localhost:8000/user/registration/'
+    const url: string = 'http://18.204.11.246:5000/user/registration/'
     return this.httpClient.post<any>(url, user, requestoption)
   }
 

@@ -1,3 +1,6 @@
+"""
+    Register models for admin page
+"""
 from django.contrib import admin
 from api.models import GradedAssignment, Assignment, Question, Choice, Material
 # Register your models here.

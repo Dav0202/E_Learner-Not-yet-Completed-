@@ -1,29 +1,53 @@
+"""
+    Serializer For API views
+"""
 from rest_framework import serializers
 from users.models import User
 from api.models import Assignment, GradedAssignment, Question, Choice, Material
 
 class StringSerializer(serializers.StringRelatedField):
+    """
+        class to replace "id" with real values
+    """
     def to_internal_value(self, value):
+        """
+            returns internal value of id
+        """
         return value
     
 
 class QuestionSerializer(serializers.ModelSerializer):
+    """
+        Class to define the Question view serializer
+    """
     choices = StringSerializer(many=True)
      
     class Meta:
+        """
+            class of a serializer class the defines its behavior
+        """
         model = Question
         fields = ('id', 'choices', 'question', 'order')
 
 class MaterialSerializer(serializers.ModelSerializer):
+    """
+    Class to define the Material view serializer
+    """
     material = serializers.FileField(allow_empty_file=False)
     uploader = serializers.CharField(source="uploader.email", read_only=True)
     class Meta:
+        """
+            class of a serializer class the defines its behavior
+        """
         model = Material
         fields = ("__all__")
     
     def create(self, request):
+        """
+            create material from data gotten 
+            from request
+        """
         data = request.data
-        print(data)
         material = Material()
         uploader = User.objects.get(email__exact =data['uploader'])
         material.uploader = uploader
@@ -34,17 +58,30 @@ class MaterialSerializer(serializers.ModelSerializer):
         
 
 class AssignmentSerializer(serializers.ModelSerializer):
+    """
+    Class to define the Assignment view serializer
+    """
     questions = serializers.SerializerMethodField()
     educator = serializers.CharField(source="educator.username", read_only=True)
     class Meta:
+        """
+            class of a serializer class the defines its behavior
+        """
         model = Assignment
         fields = ('__all__')
 
     def get_questions(self, obj):
+        """
+            gets "questions" for assignment serializer
+        """
         questions =  QuestionSerializer(obj.questions.all(), many=True).data
         return questions
 
     def create(self, request):
+        """
+            create assignment from data gotten 
+            from request
+        """
         data = request.data
         print(data)
         assignment = Assignment()
@@ -69,21 +106,31 @@ class AssignmentSerializer(serializers.ModelSerializer):
                 newC.save()
                 newQ.choices.add(newC)
 
-            newQ.answer = Choice.objects.get(title = q['answer'])
+            newQ.answer = Choice.objects.filter(title = q['answer'])
             newQ.assignment = assignment
             newQ.save()
             order += 1
         return assignment
     
 class GradedAssignmentSerializer(serializers.ModelSerializer):
+    """
+        Class to define the Graded assignment (score) view serializer
+    """
     assignment = StringSerializer(many=False)
     student = StringSerializer(many = False)
 
     class Meta:
+        """
+            class of a serializer class the defines its behavior
+        """
         model = GradedAssignment
         fields = ('__all__')
     
     def create(self, request):
+        """
+            create graded assignment from data gotten 
+            from request
+        """
         data = request.data
         print(data)
         assignment = Assignment.objects.get(id=data['id'])
@@ -98,7 +145,6 @@ class GradedAssignmentSerializer(serializers.ModelSerializer):
         print(answer)
 
         answered_correct_count = 0
-        print(questions)
         for i in range(len(questions)):
             if questions[i].answer.title == answer[i]:
                 answered_correct_count +=1

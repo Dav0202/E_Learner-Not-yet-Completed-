@@ -40,12 +40,14 @@ export class NewUserService {
   }
 
   private jwtToken!: JwtToken
-  private refreshTokenTimeout!: NodeJS.Timeout;
 
-
-
+  /**
+   * Sends login information to api
+   * @param user user login information
+   * @returns Access token as observable
+   */
   login(user: any): Observable<any> {
-    const url: string = 'http://localhost:8000/user/login/'
+    const url: string = 'http://18.204.11.246:5000/user/login/'
     const headers2 = {
       'Content-Type': 'application/json',
     }
@@ -57,13 +59,11 @@ export class NewUserService {
         res => {
           this.setText()
           this.jwtToken = decode(res.access)
-          console.log(this.jwtToken)
           localStorage.setItem('Token', res.access)
           this.encryptMode = true;
           this.conversionOutputemail = CryptoJS.AES.encrypt(JSON.stringify(this.jwtToken.email), this.cookie.get("RTY_ft")).toString();
           this.conversionOutputeducator = CryptoJS.AES.encrypt(JSON.stringify(this.jwtToken.educator), this.cookie.get("RTY_ft")).toString();
           this.conversionOutputstudent = CryptoJS.AES.encrypt(JSON.stringify(this.jwtToken.student), this.cookie.get("RTY_ft")).toString();
-
           this.cookie.set('student', this.conversionOutputstudent);
           this.cookie.set('educator', this.conversionOutputeducator);
           this.cookie.set('oYkhyT', this.conversionOutputemail); //email
@@ -74,7 +74,10 @@ export class NewUserService {
   }
 
 
-
+  /**
+   * get token from local storage
+   * @returns token
+   */
   public getToken(): string | null | undefined | void {
     let token = localStorage.getItem('Token');
     if (token) {
@@ -82,31 +85,43 @@ export class NewUserService {
     }
   }
 
+  /**
+   * check if token exist in local storage
+   * @returns boolean value
+   */
   islogged(){
     let token = localStorage.getItem('Token');
-    //let recentTime = Date.now()
-    //let exp = localStorage.getItem('exp')
-    //let expired = new Date(JSON.parse(exp!))
     if (token) {
       return true
     }
     return false
   }
 
+  /**
+   * Removes token and cookies from browser
+   */
   logout(){
     localStorage.clear()
-    this.cookie.deleteAll()
+    this.cookie.delete('RTY_ft')
+    this.cookie.delete('student')
+    this.cookie.delete('educator')
+    this.cookie.delete('oYkhyT')
     location.reload()
     this.router.navigate(['/', 'homepage'])
   }
 
 
-
+  /**
+   * set decryption password
+   */
   setText() {
     this.cookie.set('RTY_ft', uuidv4())
   }
 
-
+  /**
+   * Decrypts encrypted cookie
+   * @returns dictionary of values
+   */
   toDecryptStudentEducator() {
     this.encryptMode = false;
     this.decryptconversionOutputstudent = CryptoJS.AES.decrypt(this.cookie.get("student"),
@@ -122,9 +137,13 @@ export class NewUserService {
     }
   }
 
+  /**
+   * Refresh access token from api
+   * @returns returns new access token
+   */
   refreshToken() {
     console.log('Access Token expired Refresh begin')
-    return this.http.post<any>('http://localhost:8000/user/login/refresh/', {}, { withCredentials: true })
+    return this.http.post<any>('http://18.204.11.246:5000/user/login/refresh/', {}, { withCredentials: true })
       .pipe(map((res) => {
         this.jwtToken = decode(res.access)
         localStorage.setItem('Token', res.access)
@@ -133,33 +152,10 @@ export class NewUserService {
 
   }
 
-checkexp(){
-  let expires = new Date(JSON.parse(localStorage.getItem('exp')!))
-  let recentTime = Date.now()
-  let timeout = expires.getTime() - recentTime;
-  if (
-    (recentTime/1000 >= expires.getTime())
-    ) {
-    console.log(JSON.parse(localStorage.getItem('exp')!))
-    return true
-  }
-  return false
-}
-
-  startRefreshTokenTimer() {
-    // parse json object from base64 encoded jwt token
-    //const jwtBase64 = this.userValue!.jwtToken!.split('.')[1];
-    //const jwtToken = JSON.parse(atob(jwtBase64));
-
-    // set a timeout to refresh the token a minute before it expires
-
-    let expires = new Date(JSON.parse(localStorage.getItem('exp')!) * 1000)
-    let recentTime = Date.now() - (60 * 1000)
-    let timeout = expires.getTime() - recentTime;
-    console.log(timeout, new Date(recentTime), expires)
-    this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
-  }
-
+  /**
+   * check if user is teacher
+   * @returns boolean value
+   */
   setteacher(){
     let decryptcookies = this.toDecryptStudentEducator()
     if (decryptcookies.educator === "true" && decryptcookies.student === "false") {
@@ -168,6 +164,10 @@ checkexp(){
     return false
   }
 
+  /**
+   * check if user is student
+   * @returns boolean value
+   */
   setstudent(){
     let decryptcookies = this.toDecryptStudentEducator()
     if (decryptcookies.educator === "false" && decryptcookies.student === "true") {

@@ -1,3 +1,6 @@
+"""
+    Serializer For User API views
+"""
 from rest_framework import serializers
 from allauth.account.adapter import get_adapter
 from rest_auth.registration.serializers import RegisterSerializer
@@ -7,8 +10,14 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.exceptions import InvalidToken
 
 class CookieTokenRefreshSerializer(TokenRefreshSerializer):
+    """
+        Validates refresh token
+    """
     refresh = None
     def validate(self, attrs):
+        """
+            returns validated token or raise error
+        """
         attrs['refresh'] = self.context['request'].COOKIES.get('refresh_token')
         if attrs['refresh']:
             return super().validate(attrs)
@@ -17,8 +26,14 @@ class CookieTokenRefreshSerializer(TokenRefreshSerializer):
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+        Set access token
+    """
     @classmethod
     def get_token(cls, user):
+        """
+            returns token with additional attributes
+        """
         token = super().get_token(user)
 
         token['email'] = user.email
@@ -28,24 +43,39 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
     
     def finalize_response(self, request, response, *args, **kwargs):
-      if response.data.get('refresh'):
-          cookie_max_age = 3600 * 24 * 14
-          response.set_cookie('refresh_token', response.data['refresh'], max_age=cookie_max_age, httponly=True )
-          del response.data['refresh']
-      return super().finalize_response(request, response, *args, **kwargs)
+        """
+            return new refresh token 
+        """
+        if response.data.get('refresh'):
+            cookie_max_age = 3600 * 24 * 14
+            response.set_cookie('refresh_token', response.data['refresh'], max_age=cookie_max_age, httponly=True )
+            del response.data['refresh']
+            return super().finalize_response(request, response, *args, **kwargs)
 
 class StringSerializer(serializers.StringRelatedField):
+    """
+        class to replace "id" with real values
+    """
     def to_internal_value(self, value):
+        """
+            returns internal value of id
+        """
         return value
 
 
 class StudentSerializer(serializers.ModelSerializer):
+    """
+        Class to define the Student profile view serializer
+    """
     user = StringSerializer(many=False)
     class Meta:
         model = Student
         fields = ('__all__')
         
 class EducatorSerializer(serializers.ModelSerializer):
+    """
+        Class to define the Educator profile view serializer
+    """
     user = StringSerializer(many=False)
     class Meta:
         model = Educator
@@ -53,6 +83,9 @@ class EducatorSerializer(serializers.ModelSerializer):
         
 
 class RegisterSerializer(RegisterSerializer):
+    """
+        Class to define the User Registration view serializer
+    """
 
     email = serializers.EmailField()
     first_name = serializers.CharField(required=True,write_only=True)
@@ -64,15 +97,24 @@ class RegisterSerializer(RegisterSerializer):
     is_educator = serializers.BooleanField(required=True,)
     
     def validate_password1(self, password):
+        """
+           Check that the password data is cleaned 
+        """
         return get_adapter().clean_password(password)
 
     def validate(self, data):
+        """
+           Check that the two password entries match 
+        """
         if data['password1'] != data['password2']:
             raise serializers.ValidationError(
                 ("The two password fields didn't match."))
         return data
 
     def get_cleaned_data(self):
+        """
+           Return Cleaned data
+        """
         return {
             'first_name': self.validated_data.get('first_name', ''),
             'last_name': self.validated_data.get('last_name', ''),
@@ -84,6 +126,9 @@ class RegisterSerializer(RegisterSerializer):
         }
 
     def save(self, request):
+        """
+            Return new use and save password in a hashed format
+        """
         adapter = get_adapter()
         user = adapter.new_user(request)
         self.cleaned_data = self.get_cleaned_data()

@@ -1,9 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarVerticalPosition, } from '@angular/material/snack-bar';
-import { Component, OnInit, ViewChild, AfterViewInit, HostListener, Renderer2 } from '@angular/core';
+import { Component, OnInit, HostListener, Renderer2 } from '@angular/core';
 import { AssignmentService } from '../services/assignment.service';
 import { MatStepper } from "@angular/material/stepper";
-import { FormBuilder, FormGroup, Validators, NgForm, FormGroupDirective, FormControl, FormArray } from '@angular/forms';import { pluck } from "rxjs/operators";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NewUserService } from '../services/new-user.service';
 import { Observable, of } from 'rxjs';
 
@@ -16,11 +16,10 @@ import { Observable, of } from 'rxjs';
 export class DetailAssignmentComponent implements OnInit {
 
   @HostListener('window:beforeunload')
- // assignmentdetail:any;
   state!:string;
   isAtEnd: number = 1
   isAtstart!:number
-  length:any
+  length!:number
   assignmentanswer: any[] = []
   answer!: string;
   radioSelected!:string;
@@ -38,6 +37,11 @@ export class DetailAssignmentComponent implements OnInit {
   questionForm!:FormGroup
   isSaved = false;
 
+  /**
+   * function that stop the exiting of a page
+   * showing warning of what happens
+   * @returns boolean value of true or false
+   */
   canDeactivate(): Observable<boolean> {
     if (!this.isSaved) {
       const result = window.confirm('WARNING: Incomplete assignment, Risk getting a 0');
@@ -45,17 +49,26 @@ export class DetailAssignmentComponent implements OnInit {
     }
     return of(true);
   }
-  //private currentassignment:any;
- // private originalassignment:any;
-
   assignmentdetail:any;
 
-
   ngOnInit(): void {
-    this.assignmentdetail = this.route.snapshot.data['assignment']
-    this.length = this.assignmentdetail.questions.length
+    this.route.paramMap.subscribe(
+      params => {
+        const id: any = params.get('id')
+        this.as.getAssignmentDetail(id).subscribe(
+                    list => {
+            this.assignmentdetail = list;
+            this.length = list.questions.length
+          }
+        )
+      }
+    )
   }
 
+  /**
+   * Back button stepper
+   * @param stepper Mat stepper class
+   */
   goBack(stepper: MatStepper){
     stepper.previous();
     if (this.isAtEnd > this.length) {
@@ -63,6 +76,10 @@ export class DetailAssignmentComponent implements OnInit {
     }
   }
 
+  /**
+   * Forward button stepper
+   * @param stepper Mat stepper class
+   */
   goForward(stepper: MatStepper){
     stepper.next();
     if (this.isAtEnd < this.length) {
@@ -72,14 +89,20 @@ export class DetailAssignmentComponent implements OnInit {
 
   }
 
+  /**
+   * returns decrypted student email
+   * @returns student email
+   */
   setstudent(){
     let decryptcookies = this.ns.toDecryptStudentEducator()
-    console.log(decryptcookies)
     if (decryptcookies.educator === "false" && decryptcookies.student === "true") {
       return JSON.parse(decryptcookies.email)
     }
   }
 
+  /**
+   * Submits form to api
+   */
   submit(){
     this.questionForm = this.fb.group({
       email: this.setstudent(),
@@ -89,13 +112,17 @@ export class DetailAssignmentComponent implements OnInit {
     this.assignmentanswer.push(this.answer)
     this.as.createdGradedAssignment(this.questionForm.value).subscribe()
     this.isSaved = true
-    console.log(this.questionForm.value)
+
     this.snackBar.open('Assignment submited', 'Close', {
       verticalPosition:this.verticalPosition,
     })
     this.router.navigate(['/', 'homepage'])
   }
 
+  /**
+   * Checks for scrollTop event and customize html as required
+   * @param event event
+   */
   @HostListener('window:scroll', ['$event'])
   scrollFunction(event:any){
     if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
@@ -112,7 +139,11 @@ export class DetailAssignmentComponent implements OnInit {
   }
 
 
-
+  /**
+   * Checks for screen width and add classes
+   * to customize the html as required
+   * @param event event
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event:any){
     const container = document.getElementById('navbarSupportedContent');

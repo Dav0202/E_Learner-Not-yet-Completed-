@@ -17,9 +17,12 @@ export class GradedAssignmentComponent implements OnInit {
 
   grade: any
 
+  /**
+   * returns decrypted student email
+   * @returns student email
+   */
   setstudent(){
     let decryptcookies = this.ns.toDecryptStudentEducator()
-    console.log(decryptcookies)
     if (decryptcookies.educator === "false" && decryptcookies.student === "true") {
       return JSON.parse(decryptcookies.email)
     }
@@ -30,12 +33,16 @@ export class GradedAssignmentComponent implements OnInit {
     let email: string= this.setstudent()
     this.as.getGradedAssignment(email).subscribe(
       (assignment: any) => {
-        console.log(assignment)
         this.grade = assignment
       }
     )
   }
 
+  /**
+   * Checks for screen and add classes
+   * to customize the html as required
+   * @param event event
+   */
   @HostListener('window:scroll', ['$event'])
   scrollFunction(event:any){
     if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
@@ -51,8 +58,11 @@ export class GradedAssignmentComponent implements OnInit {
     }
   }
 
-
-
+  /**
+   * Checks for screen and add classes
+   * to customize the html as required
+   * @param event event
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event:any){
     const container = document.getElementById('navbarSupportedContent');

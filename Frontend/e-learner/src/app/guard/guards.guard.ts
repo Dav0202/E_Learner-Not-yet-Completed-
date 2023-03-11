@@ -13,6 +13,7 @@ export class GuardsGuard implements CanActivate {
     private router: Router,
     private authService: NewUserService
   ) { }
+
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

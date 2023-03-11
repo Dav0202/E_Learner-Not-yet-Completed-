@@ -1,3 +1,6 @@
+"""
+    Urls for Profile Creation
+"""
 from .views import StudentViewSet, EducatorViewSet
 from rest_framework.routers import DefaultRouter
 

@@ -1,3 +1,6 @@
+"""
+    Signal to automatically create new profile for each user
+"""
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -11,8 +14,7 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     """
     if created:
         if instance.is_student:
-            Student.objects.create(user=instance) # you have correctly passed instance to foreign key and you just need to check condition for the same        
-
+            Student.objects.create(user=instance) 
         else:
             Educator.objects.create(user=instance)
 

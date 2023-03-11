@@ -22,12 +22,15 @@ export class MaterialViewComponent implements OnInit {
   ngOnInit(): void {
     this.ms.getmaterial().subscribe(
       (material: any) => {
-        console.log(material)
         this.material = material
       }
     )
   }
 
+  /**
+   * Checks for scrollTop event and customize html as required
+   * @param event event
+   */
   @HostListener('window:scroll', ['$event'])
   scrollFunction(event:any){
     if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
@@ -43,8 +46,11 @@ export class MaterialViewComponent implements OnInit {
     }
   }
 
-
-
+  /**
+   * Checks for screen and add classes
+   * to customize the html as required
+   * @param event event
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event:any){
     const container = document.getElementById('navbarSupportedContent');

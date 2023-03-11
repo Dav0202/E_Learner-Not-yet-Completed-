@@ -1,3 +1,6 @@
+"""
+    Urls for graded assignment (Automatic scores Creation)
+"""
 from api.views import GradedAssignmentListView, GradedAssignmentCreateView
 from django.urls import path
 

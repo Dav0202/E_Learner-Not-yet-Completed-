@@ -1,3 +1,6 @@
+"""
+    Create models for Database
+"""
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from users.models import User
@@ -6,6 +9,9 @@ import uuid
 # Create your models here.
 
 class Assignment(models.Model):
+    """
+        Class that defines assignment model
+    """
     #Subjects
     BASIC_SCIENCE = 'BSC'
     ENGLISH = 'ENG'
@@ -54,6 +60,9 @@ class Assignment(models.Model):
 
 
 class GradedAssignment(models.Model):
+    """
+        Class that defines Graded assignment or score model
+    """
     student = models.ForeignKey(User, limit_choices_to={'is_student': True}, on_delete=models.CASCADE)
     assignment = models.ForeignKey(Assignment, on_delete=models.SET_NULL,
     blank=True, null=True)
@@ -64,12 +73,20 @@ class GradedAssignment(models.Model):
 
 
 class Choice(models.Model):
+    """
+        Class that defines choice model
+
+    """
     title = models.CharField(max_length=50)
 
     def __str__(self):
         return self.title
 
 class Question(models.Model):
+    """
+        Class that defines question model
+
+    """
     question = models.CharField(max_length=500)
     choices = models.ManyToManyField(Choice)
     answer = models.ForeignKey(
@@ -83,6 +100,10 @@ class Question(models.Model):
 
 
 class Material(models.Model):
+    """
+        Class that defines material upload model
+
+    """
     uploader = models.ForeignKey(User, limit_choices_to={'is_educator': True}, on_delete=models.CASCADE)
     description = models.CharField(max_length=255, blank=True)
     material = models.FileField(upload_to=f"material/%Y/%m/%d/{uuid.uuid4()}")

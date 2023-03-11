@@ -12,6 +12,10 @@ export class DropdownDirective {
 
   @HostBinding("class.show") isOpen = false;
 
+  /**
+   *  sets the is open and wasinside
+   *  variable
+   */
   @HostListener("click") toggleOpen() {
     this.isOpen = !this.isOpen;
     this.wasInside = true;

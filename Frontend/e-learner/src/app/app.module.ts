@@ -32,6 +32,7 @@ import { MaterialViewComponent } from './material-view/material-view.component';
 import { Error404Component } from './error404/error404.component';
 import { DropdownDirective } from './homepage/dropdown.directive';
 import { SearchpipePipe } from './pipes/searchpipe.pipe';
+import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { SearchpipePipe } from './pipes/searchpipe.pipe';
 
   ],
   providers: [
+
     {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher},
     {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     CookieService,

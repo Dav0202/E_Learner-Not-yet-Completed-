@@ -25,21 +25,27 @@ export class MaterialsComponent implements OnInit {
   uploadProgress!:number;
   uploadSub!: Subscription;
 
-
   ngOnInit(): void {
 
   }
 
   myForm = new FormGroup({
     uploader: new FormControl(''),
-    material: new FormControl(''),
-    description: new FormControl('')
+    material: new FormControl('',Validators.required),
+    description: new FormControl('',Validators.required)
   });
 
+  /**
+   * return form control
+   */
   get f(){
     return this.myForm.controls;
   }
 
+  /**
+   * returns decrypted student email
+   * @returns student email
+   */
   setstudent(){
     let decryptcookies = this.ns.toDecryptStudentEducator()
     if (decryptcookies.educator === "true" && decryptcookies.student === "false") {
@@ -47,8 +53,12 @@ export class MaterialsComponent implements OnInit {
     }
   }
 
+  /**
+   * upload file to form and set
+   * file description
+   * @param event
+   */
   onFileChange(event:any) {
-
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.myForm.patchValue({
@@ -58,12 +68,14 @@ export class MaterialsComponent implements OnInit {
     }
   }
 
+  /**
+   * submit form to api
+   */
   submit(){
     const formData = new FormData();
     formData.append('material', this.myForm.get('material')!.value);
     formData.append('uploader', this.myForm.get('uploader')!.value);
     formData.append('description', this.myForm.get('description')!.value);
-    console.log(this.myForm.value);
     this.uploadService.postdata(formData).subscribe(res => {
         if (res.type == HttpEventType.UploadProgress) {
           this.uploadProgress = Math.round(100 * (res.loaded / res.total));
@@ -72,16 +84,26 @@ export class MaterialsComponent implements OnInit {
     })
   }
 
+  /**
+   * cancel material upload
+   */
   cancelUpload() {
     this.uploadSub.unsubscribe();
     this.reset();
   }
 
+  /**
+   * reset material upload
+   */
   reset() {
     this.uploadProgress = null as any;
     this.uploadSub = null as any;
   }
 
+  /**
+   * Checks for scrollTop event and customize html as required
+   * @param event event
+   */
   @HostListener('window:scroll', ['$event'])
   scrollFunction(event:any){
     if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
@@ -97,8 +119,11 @@ export class MaterialsComponent implements OnInit {
     }
   }
 
-
-
+  /**
+   * Checks for screen width and add classes
+   * to customize the html as required
+   * @param event event
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event:any){
     const container = document.getElementById('navbarSupportedContent');

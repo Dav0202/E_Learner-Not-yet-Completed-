@@ -6,15 +6,12 @@ import { Component, ElementRef, HostBinding, HostListener, OnInit, Renderer2, Di
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css']
 })
-export class HomepageComponent implements OnInit {
 
+export class HomepageComponent implements OnInit {
   constructor(
     public ns: NewUserService,
     private renderer: Renderer2, private el: ElementRef,
   ) { }
-
-
-  private unlistener!: () => void;
 
   ngOnInit(): void {
   }
@@ -22,17 +19,29 @@ export class HomepageComponent implements OnInit {
   @HostBinding('navbarSupportedContent') shown!: any;
   @HostBinding('navbarSupportedContent') hidden!:any;
 
+  /**
+   *  sets the show and hidden
+   *  variable
+   */
   @HostListener('click') sideBar() {
     this.shown = this.showmenu()
     this.hidden = this.closemenu()
   }
 
+  /**
+   * set css class for menu opening
+   * @param event event
+   */
   @HostBinding()
   openMenu(event:any){
       const container = document.getElementById('body');
       this.renderer.addClass(container,"sidebar-open");
   }
 
+  /**
+   * Checks for scrollTop event and customize html as required
+   * @param event event
+   */
   @HostListener('window:scroll', ['$event'])
   scrollFunction(event:any){
     if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
@@ -48,8 +57,11 @@ export class HomepageComponent implements OnInit {
     }
   }
 
-
-
+  /**
+   * Checks for screen width and add classes
+   * to customize the html as required
+   * @param event event
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event:any){
     const container = document.getElementById('navbarSupportedContent');

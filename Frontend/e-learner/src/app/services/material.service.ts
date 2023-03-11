@@ -9,14 +9,21 @@ export class MaterialService {
   constructor(private http: HttpClient,
     ) {}
 
-
+  /**
+   * get material data from server
+   * @returns material data
+   */
   getmaterial(): Observable<any>{
-    return this.http.get<any>('http://localhost:8000/materials/')
+    return this.http.get<any>('http://18.204.11.246:5000/materials/')
   }
 
+  /**
+   * upload data to server
+   * @param formData data to upload
+   * @returns progress report
+   */
   postdata(formData:any): Observable<any>{
-    console.log(formData)
-    return this.http.post('http://localhost:8000/materials/', formData, {
+    return this.http.post('http://18.204.11.246:5000/materials/', formData, {
       reportProgress: true,
       observe: 'events'
   })

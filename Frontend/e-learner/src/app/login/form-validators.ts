@@ -1,5 +1,11 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 
+/**
+ * Check that the two password entries match
+ * @param matchTo string to match to
+ * @param reverse boolean to specify backtracing
+ * @returns control parent and control parent values
+ */
 export function matchValidator(
   matchTo: string,
   reverse?: boolean

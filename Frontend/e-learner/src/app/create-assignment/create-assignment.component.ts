@@ -8,6 +8,8 @@ import { FormControl,
   FormBuilder,
   FormArray,
   Validators} from '@angular/forms';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,6 +19,7 @@ import { FormControl,
 })
 export class CreateAssignmentComponent implements OnInit {
 
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
   questionForm!: FormGroup;
 
   class_list = [
@@ -36,7 +39,9 @@ export class CreateAssignmentComponent implements OnInit {
     { name: 'History', value: 'HSY'},
   ];
 
-
+  /** Gets question from Form array
+   * @returns "questions" from form group
+   */
   get question(): FormArray {
     return this.questionForm.get("question") as FormArray;
   }
@@ -47,6 +52,8 @@ export class CreateAssignmentComponent implements OnInit {
     private cookieservice: CookieService,
     public ns: NewUserService,
     private renderer: Renderer2,
+    private snackBar: MatSnackBar,
+    private router:Router
   ) { }
 
   ngOnInit(): void {
@@ -61,6 +68,10 @@ export class CreateAssignmentComponent implements OnInit {
 
   onTouched: () => void = () => {};
 
+  /**
+   * builds a new question form
+   * @returns form question builder group
+   */
   buildQuestion(): FormGroup {
     return this.fb.group({
       question: "",
@@ -69,45 +80,75 @@ export class CreateAssignmentComponent implements OnInit {
     });
   }
 
+  /**
+   * builds a new choice form
+   * @returns form choice builder group
+   */
   buildChoices(): FormControl {
     return new FormControl();
   }
 
+  /**
+   * @param groupName group name to pass to function
+   * @param i number to pass to function
+   * @returns choice array controls
+   */
   choices(groupName: string, i: number): Array<FormControl> {
     return this.choiceFormArray(groupName, i).controls as Array<FormControl>;
   }
 
+  /**
+   * Returns choice form array
+   * @param groupName choice group name
+   * @param i no of choice group
+   * @returns Form Array of choices
+   */
   choiceFormArray(groupName: string, i: number) {
     return (this.questionForm.get(groupName) as FormArray).controls[i].get(
       "choices"
     ) as FormArray;
   }
 
+  /**
+   * add new choices form array to form builder
+   * @param groupName choice group name
+   * @param i no of choice group
+   */
   addChoices(groupName: string, i = 0): void {
     this.choiceFormArray(groupName, i).push(this.buildChoices());
-    console.log(this.choiceFormArray)
   }
 
+  /**
+   * remove new choices form array to form builder
+   * @param groupName choice group name
+   * @param i no of choice group
+   */
   removeChoices(groupName: string, i = 0): void {
     const choice = this.choiceFormArray(groupName, i)
     if (choice.length > 1) choice.removeAt(i);
-    console.log(this.choiceFormArray)
   }
 
+  /**
+   * add new question to form builder
+   */
   addQuestion(): void {
     this.question.push(this.buildQuestion());
-    console.log(this.question)
   }
 
+  /**
+   * remove question from form builder
+   * @param index no of question
+   */
   removeQuestion(index: number){
     if (this.question.length > 1) this.question.removeAt(index);
-   // else this.question.patchValue([{question: null, answer: null, choices:new Array}]);
-   console.log(this.question)
   }
 
+  /**
+   * Decrypts encrypted cookies and return
+   * pathes form depending on the boolean values of decryption
+   */
   setteacher(){
     let decryptcookies = this.ns.toDecryptStudentEducator()
-    console.log(decryptcookies)
     if (decryptcookies.educator === "true" && decryptcookies.student === "false") {
       this.questionForm.patchValue({
         educator: JSON.parse(decryptcookies.email)
@@ -115,12 +156,27 @@ export class CreateAssignmentComponent implements OnInit {
     }
   }
 
+  /**
+   * Submits form to api
+   */
   submitQ(){
     this.setteacher()
-    console.log(this.questionForm.value)
-    this.as.createAssignment(this.questionForm.value).subscribe()
+    this.as.createAssignment(this.questionForm.value).subscribe(
+      {
+        next:(res) => {
+          this.router.navigate(['/', 'homepage'])
+          this.snackBar.open('Assignment Created', 'Close', {
+          duration: 4000,
+          verticalPosition: this.verticalPosition,
+        })
+      }}
+    )
   }
 
+  /**
+   * Checks for scrollTop event and customize html as required
+   * @param event event
+   */
   @HostListener('window:scroll', ['$event'])
   scrollFunction(event:any){
     if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
@@ -137,7 +193,11 @@ export class CreateAssignmentComponent implements OnInit {
   }
 
 
-
+  /**
+   * Checks for screen and add classes
+   * to customize the html as required
+   * @param event event
+   */
   @HostListener('window:resize', ['$event'])
   onResize(event:any){
     const container = document.getElementById('navbarSupportedContent');
